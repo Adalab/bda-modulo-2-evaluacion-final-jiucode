@@ -51,6 +51,20 @@ INNER JOIN rental AS r -- inner join because we want matches between customers a
 ON c.customer_id = r.customer_id
 INNER JOIN inventory AS i -- inner join again because we just want matches. not interested in customers who did not rent
 ON r.inventory_id = i.inventory_id
-GROUP BY c.customer_id
+GROUP BY c.customer_id;
+
+-- Encuentra la cantidad total de películas alquiladas por categoría y muestra el nombre de la categoría junto con el recuento de alquileres.
+SELECT cat.name, COUNT(r.rental_date) AS "Recuento alquileres"
+FROM category AS cat
+INNER JOIN film_category AS fc -- inners joins to retrieve coincidences
+ON cat.category_id = fc.category_id
+INNER JOIN film AS f
+ON fc.film_id = f.film_id
+INNER JOIN inventory AS i
+ON f.film_id = i.film_id
+INNER JOIN rental AS r
+ON i.inventory_id = r.inventory_id
+GROUP BY cat.name
+
 
 
