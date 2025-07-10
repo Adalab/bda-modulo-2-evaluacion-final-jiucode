@@ -85,5 +85,35 @@ SELECT title
 FROM film
 WHERE `description` LIKE "%dog%" or "%cat%";
 
+-- Hay algún actor o actriz que no aparezca en ninguna película en la tabla film_actor
+SELECT a.actor_id, a.first_name
+FROM actor AS a
+LEFT JOIN film_actor AS fa -- left join so it can get all actors even if they didn't participate in any movie.
+ON a.actor_id = fa.actor_id
+WHERE fa.actor_id IS NULL; -- checking for null ids
+
+-- Encuentra el título de todas las películas que fueron lanzadas entre el año 2005 y 2010.
+SELECT title
+FROM film
+WHERE release_year BETWEEN 2005 AND 2010; 
+
+-- Encuentra el título de todas las películas que son de la misma categoría que "Family".
+SELECT f.title
+FROM film AS f
+INNER JOIN film_category AS fc
+ON f.film_id=fc.film_id
+INNER JOIN category AS c
+ON fc.category_id=c.category_id
+WHERE c.name ="Family";
+
+-- Muestra el nombre y apellido de los actores que aparecen en más de 10 películas.
+SELECT a.first_name, a.last_name
+FROM actor AS a
+INNER JOIN film_actor AS fa
+ON a.actor_id = fa.actor_id
+INNER JOIN film AS f
+ON fa.film_id = f.film_id
+GROUP BY a.first_name, a.last_name -- group by must be before the having. if not it gives an error.
+HAVING COUNT(f.film_id) > 10;
 
 
