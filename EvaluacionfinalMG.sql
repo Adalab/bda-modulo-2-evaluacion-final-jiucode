@@ -64,7 +64,26 @@ INNER JOIN inventory AS i
 ON f.film_id = i.film_id
 INNER JOIN rental AS r
 ON i.inventory_id = r.inventory_id
-GROUP BY cat.name
+GROUP BY cat.name;
+
+-- Encuentra el promedio de duración de las películas para cada clasificación de la tabla film y muestra la clasificación junto con el promedio de duración
+SELECT AVG(length), rating
+FROM film
+GROUP BY rating;
+
+-- Encuentra el nombre y apellido de los actores que aparecen en la película con title "Indian Love"
+SELECT a.first_name, a.last_name
+FROM actor AS a
+INNER JOIN film_actor AS fa
+ON a.actor_id = fa.actor_id
+INNER JOIN film AS f
+ON fa.film_id = f.film_id
+WHERE f.title ="Indian Love";
+
+-- Muestra el título de todas las películas que contengan la palabra "dog" o "cat" en su descripción
+SELECT title
+FROM film
+WHERE `description` LIKE "%dog%" or "%cat%";
 
 
 
