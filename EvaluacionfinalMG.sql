@@ -173,9 +173,9 @@ where a.actor_id NOT IN (SELECT a.actor_id
  -- Encuentra el título de las películas que son comedias y tienen una duración mayor a 180 minutos en la tabla film.
  SELECT f.title
  FROM film AS f
- LEFT JOIN film_category AS fc
+ INNER JOIN film_category AS fc
  ON f.film_id=fc.film_id
- LEFT JOIN category AS c
+ INNER JOIN category AS c
  ON fc.category_id=c.category_id
  WHERE c.name = "Comedy" AND f.length>180 
  
