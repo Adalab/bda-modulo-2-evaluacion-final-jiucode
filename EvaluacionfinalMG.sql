@@ -116,4 +116,47 @@ ON fa.film_id = f.film_id
 GROUP BY a.first_name, a.last_name -- group by must be before the having. if not it gives an error.
 HAVING COUNT(f.film_id) > 10;
 
+--  Encuentra el título de todas las películas que son "R" y tienen una duración mayor a 2 horas en la tabla film
+ SELECT title
+ FROM film
+ WHERE rating ="R" AND length> 120;
+ 
+ -- Encuentra las categorías de películas que tienen un promedio de duración superior a 120 minutos y muestra el nombre de la categoría junto con el promedio de duración
+SELECT rating, AVG(length)
+FROM film
+WHERE length> 120
+GROUP BY rating;
+ 
+ -- Encuentra los actores que han actuado en al menos 5 películas y muestra el nombre del actor junto con la cantidad de películas en las que han actuado.
+SELECT a.first_name, COUNT(f.film_id) as "cantidad de peliculas"
+FROM actor AS a
+INNER JOIN film_actor AS fa
+ON a.actor_id = fa.actor_id
+INNER JOIN film AS f
+ON fa.film_id = f.film_id
+GROUP BY a.first_name 
+HAVING COUNT(f.film_id) >= 5; -- 5 should be included in this case
 
+ -- Encuentra el título de todas las películas que fueron alquiladas por más de 5 días. Utiliza una subconsulta para encontrar los rental_ids con una duración superior a 5 días y luego selecciona las películas correspondientes.
+ 
+ -- subquery
+ SELECT rental_id, rental_date, return_date
+ FROM rental
+ WHERE datediff(return_date,rental_date) > 5; 
+
+-- joining all together
+ SELECT f.title
+ FROM film AS f
+ INNER JOIN inventory AS i
+ ON f.film_id = i.film_id
+ INNER JOIN rental AS r
+ ON i.inventory_id = r.rental_id
+ WHERE r.rental_id IN (SELECT rental_id -- we removed the extra fields to avoid errors . Apart from that, we use IN to check the rental id using the conditions. if we use = it fails)
+ FROM rental
+ WHERE datediff(return_date,rental_date) > 5);
+ 
+ 
+ 
+ 
+ 
+ 
