@@ -85,7 +85,7 @@ SELECT title
 FROM film
 WHERE `description` LIKE "%dog%" or "%cat%";
 
--- Hay algún actor o actriz que no aparezca en ninguna película en la tabla film_actor
+-- Hay algún actor o actriz que no aparezca en ninguna película en la tabla film_actor -- no.
 SELECT a.actor_id, a.first_name
 FROM actor AS a
 LEFT JOIN film_actor AS fa -- left join so it can get all actors even if they didn't participate in any movie.
@@ -144,7 +144,7 @@ HAVING COUNT(f.film_id) >= 5; -- 5 should be included in this case
  FROM rental
  WHERE datediff(return_date,rental_date) > 5; 
 
--- joining all together
+-- merging all together
  SELECT f.title
  FROM film AS f
  INNER JOIN inventory AS i
@@ -154,6 +154,22 @@ HAVING COUNT(f.film_id) >= 5; -- 5 should be included in this case
  WHERE r.rental_id IN (SELECT rental_id -- we removed the extra fields to avoid errors . Apart from that, we use IN to check the rental id using the conditions. if we use = it fails)
  FROM rental
  WHERE datediff(return_date,rental_date) > 5);
+ 
+ -- Encuentra el nombre y apellido de los actores que no han actuado en ninguna película de la categoría "Horror". Utiliza una subconsulta para encontrar los actores que han actuado en películas de la categoría "Horror" y luego exclúyelos de la lista de actores.
+SELECT a.first_name, a.last_name
+FROM actor AS a
+where a.actor_id NOT IN (SELECT a.actor_id 
+ FROM actor AS a
+ LEFT JOIN film_actor AS fa
+ ON a.actor_id = fa.actor_id
+ LEFT JOIN film AS f
+ ON fa.film_id = f.film_id
+ LEFT JOIN film_category AS fc
+ ON f.film_id=fc.film_id
+ LEFT JOIN category AS c
+ ON fc.category_id=c.category_id
+ WHERE c.name = "Horror")
+ 
  
  
  
